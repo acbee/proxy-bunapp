@@ -1,0 +1,16 @@
+{
+  "name": "proxy-bunapp",
+  "module": "server.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0"
+  }
+}

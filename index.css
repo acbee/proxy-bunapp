@@ -1,0 +1,36 @@
+body {
+  color: #222;
+  background: #fff;
+
+  font-family: 'Open Sans';
+  font-size: 14pt;
+  padding: 25px;
+  line-height: 1.8;
+}
+
+a {
+  color: #0033cc;
+  text-decoration: none;
+}
+
+#title { 
+    color: a9a9a9;
+}
+
+svg { 
+  height: 20px;
+  vertical-align: middle;
+  fill: #666;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #eee;
+    background: #121212;
+  }
+
+  body a {
+    color: #809fff;
+  }
+}
+

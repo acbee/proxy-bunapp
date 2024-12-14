@@ -1,0 +1,185 @@
+<html>
+<head>
+  <title>Server</title>
+  <meta name='HandheldFriendly' content='true' />
+  <meta name='MobileOptimized' content='320' />
+  <meta name='viewport' content='initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no, width=device-width' />
+  <link type='text/css' href='opensans.css' rel='stylesheet'>
+  <link type='text/css' href='index.css' rel='stylesheet'>
+  <!-- Favicon.io -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById('client_ipa').style.display = 'none';
+      document.getElementById('downlo_ipa').style.display = 'none';
+      document.getElementById('server_ipa').style.display = 'none';
+      document.getElementById("title").addEventListener("click", function() { 
+        document.getElementById('client_ipa').style.display = 'inline';
+        document.getElementById('downlo_ipa').style.display = 'inline';
+        document.getElementById('server_ipa').style.display = 'inline';
+      });
+    });
+
+    // Client
+    apiUrl = 'https://api.ipdata.co?api-key=ebadd34957352f3f750edb1d636a48f73ec933e6882e628624fe11c3';
+    fetch(apiUrl)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        try {
+          var ipa = data.ip;
+          var isp = data.asn.name;
+          var cnt = data.country_name;
+          console.log('Client ISP: ' + isp);
+          console.log('Client IPA: ' + ipa);
+          console.log('Client CNT: ' + cnt);
+          if (isp && ipa && cnt) {
+            document.getElementById('client_ipa').innerHTML = ipa;
+            document.getElementById('client_isp').innerHTML = isp;
+            document.getElementById('client_cnt').innerHTML = cnt;
+          }
+          } catch(error) {
+            console.log(error);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+    // Downloaders
+    apiUrl = '/ip_downloaders';
+    fetch(apiUrl)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        try {
+          var ipa = data.public_ip;
+          var isp = data.organization;
+          var cnt = data.country;
+          console.log("Downloaders ISP: " + isp);
+                    console.log("Downloaders IPA: " + ipa);
+                    console.log("Downloaders CNT: " + cnt);
+
+                    if (isp.substring(0, 2) == "AS")
+                    {
+                        isp = isp.substring(8, 50);
+                        console.log("Downloaders ISP: " + isp + "(modified)");
+                    }
+                    if (isp && ipa && cnt) {
+                        document.getElementById('downlo_ipa').innerHTML = ipa;
+                        document.getElementById('downlo_isp').innerHTML = isp;
+                        document.getElementById('downlo_cnt').innerHTML = cnt;
+                    }
+                } catch(error) {
+                    console.log(error);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            }); 
+ 
+        // Server
+        apiUrl = '/ip_server';
+        fetch(apiUrl)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                try {
+                    var ipa = data.ip;
+                    var isp = data.asn.name;
+                    var cnt = data.country_name;
+                    console.log("Server ISP: " + isp);
+                    console.log("Server IPA: " + ipa);
+                    console.log("Server CNT: " + cnt);
+                    if (isp && ipa && cnt) {
+                        document.getElementById('server_ipa').innerHTML = ipa;
+                        document.getElementById('server_isp').innerHTML = isp;
+                        document.getElementById('server_cnt').innerHTML = cnt;
+                    }
+                } catch(error) {
+                    console.log(error);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    </script>
+</head>
+
+<body>
+    <p>
+        <div id="title">
+          Client 
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>toggle-switch-off-outline</title><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>
+        </div>
+        <div id="client_isp">&nbsp;</div>
+        <div id="client_ipa">&nbsp;</div>
+        <div id="client_cnt">&nbsp;</div>
+    </p>
+    <p>
+        <div id="title">Downloaders</div>
+        <div id="downlo_isp">&nbsp;</div>
+        <div id="downlo_ipa">&nbsp;</div>
+        <div id="downlo_cnt">&nbsp;</div>
+    </p>
+    <p>
+        <div id="title">Server</div>
+        <div id="server_isp">&nbsp;</div>
+        <div id="server_ipa">&nbsp;</div>
+        <div id="server_cnt">&nbsp;</div>
+    </p>
+
+    <p>
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>home-assistant</title><path d="M21.8,13H20V21H13V17.67L15.79,14.88L16.5,15C17.66,15 18.6,14.06 18.6,12.9C18.6,11.74 17.66,10.8 16.5,10.8A2.1,2.1 0 0,0 14.4,12.9L14.5,13.61L13,15.13V9.65C13.66,9.29 14.1,8.6 14.1,7.8A2.1,2.1 0 0,0 12,5.7A2.1,2.1 0 0,0 9.9,7.8C9.9,8.6 10.34,9.29 11,9.65V15.13L9.5,13.61L9.6,12.9A2.1,2.1 0 0,0 7.5,10.8A2.1,2.1 0 0,0 5.4,12.9A2.1,2.1 0 0,0 7.5,15L8.21,14.88L11,17.67V21H4V13H2.25C1.83,13 1.42,13 1.42,12.79C1.43,12.57 1.85,12.15 2.28,11.72L11,3C11.33,2.67 11.67,2.33 12,2.33C12.33,2.33 12.67,2.67 13,3L17,7V6H19V9L21.78,11.78C22.18,12.18 22.59,12.59 22.6,12.8C22.6,13 22.2,13 21.8,13M7.5,12A0.9,0.9 0 0,1 8.4,12.9A0.9,0.9 0 0,1 7.5,13.8A0.9,0.9 0 0,1 6.6,12.9A0.9,0.9 0 0,1 7.5,12M16.5,12C17,12 17.4,12.4 17.4,12.9C17.4,13.4 17,13.8 16.5,13.8A0.9,0.9 0 0,1 15.6,12.9A0.9,0.9 0 0,1 16.5,12M12,6.9C12.5,6.9 12.9,7.3 12.9,7.8C12.9,8.3 12.5,8.7 12,8.7C11.5,8.7 11.1,8.3 11.1,7.8C11.1,7.3 11.5,6.9 12,6.9Z" /></svg>
+        <a href="https://home.abarker.ca" 		>Home Assistant</a>
+      </span>
+      <br />
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plex</title><path d="M4,2C2.89,2 2,2.89 2,4V20C2,21.11 2.89,22 4,22H20C21.11,22 22,21.11 22,20V4C22,2.89 21.11,2 20,2H4M8.56,6H12.06L15.5,12L12.06,18H8.56L12,12L8.56,6Z" /></svg>
+        <a href="http://plex.abarker.ca"  		>Plex</a>
+     </span>
+    </p>
+
+    <p>
+      <span>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2m1.25 17.188a5.9 5.9 0 0 1-2.622-.611a6.162 6.162 0 0 0 7.949-7.949a5.937 5.937 0 0 1-5.327 8.56m-.163-12.182c.047 0 .094.006.141.009l.152.011l.141.016l.149.019l.138.022c.046.008.1.016.148.026l.135.028l.145.034l.133.035l.142.04l.13.041l.139.047l.128.047l.136.054c.045.019.083.034.124.053l.133.059l.122.059l.128.066l.119.064l.125.072l.115.07l.122.078l.11.074q.06.04.118.084l.107.079l.114.089l.1.084l.11.1l.1.089q.052.048.105.1l.094.093l.1.1l.09.1l.095.11l.085.1l.09.115l.08.1c.026.031.056.079.084.119l.075.108l.079.123l.07.112l.074.128l.064.115l.068.132l.058.117l.062.138l.053.118c.017.04.037.1.056.143s.032.08.046.12l.05.147c.016.047.028.081.04.122l.044.153c.015.053.023.08.033.121s.025.1.037.158l.027.121l.03.166l.021.119l.022.175c0 .038.01.076.014.114q.01.1.015.2c0 .03.006.061.007.092q.008.15.008.3a5.834 5.834 0 0 1-5.834 5.834q-.15.002-.3-.008l-.1-.007l-.194-.015c-.04 0-.079-.01-.118-.015l-.171-.021l-.124-.022l-.16-.029l-.126-.028l-.154-.036c-.054-.013-.083-.023-.125-.034l-.149-.043l-.125-.041c-.048-.016-.1-.031-.143-.049l-.124-.047l-.139-.055q-.062-.026-.122-.054c-.04-.018-.09-.039-.134-.06l-.12-.06l-.13-.067l-.117-.065l-.125-.073l-.114-.071l-.121-.077l-.111-.077l-.117-.083l-.106-.082l-.113-.088a2 2 0 0 1-.1-.087c-.031-.03-.072-.061-.107-.093l-.1-.092l-.1-.1l-.1-.1a2 2 0 0 0-.1-.1l-.091-.1a5 5 0 0 1-.178-.212a5 5 0 0 1-.169-.221l-.081-.115l-.077-.113l-.076-.119l-.071-.117a8 8 0 0 1-.2-.371l-.06-.124l-.059-.13l-.054-.127l-.053-.133q-.026-.067-.047-.13l-.047-.137l-.041-.133l-.04-.139a4 4 0 0 1-.068-.278l-.029-.138l-.026-.145l-.022-.14l-.019-.147l-.016-.143c-.005-.043-.008-.1-.011-.149L7 13.084v-.251a5.8 5.8 0 0 1 .257-1.717a2.917 2.917 0 1 0 3.859-3.859A5.8 5.8 0 0 1 12.833 7c.085 0 .167 0 .254.006M4.5 12a.834.834 0 0 1-1.667 0A9.167 9.167 0 0 1 12 2.833A.834.834 0 0 1 12 4.5A7.5 7.5 0 0 0 4.5 12"/></svg>
+        <a href="/overseerr"              		>Overseerr</a>
+      </span>
+      <br />
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>headphones</title><path d="M12,1C7,1 3,5 3,10V17A3,3 0 0,0 6,20H9V12H5V10A7,7 0 0,1 12,3A7,7 0 0,1 19,10V12H15V20H18A3,3 0 0,0 21,17V10C21,5 16.97,1 12,1Z" /></svg>
+        <a href="http://server.abarker.ca:8085"	>PodFetch</a>
+      </span>
+      <br />
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>movie-open</title><path d="M20.84 2.18L16.91 2.96L19.65 6.5L21.62 6.1L20.84 2.18M13.97 3.54L12 3.93L14.75 7.46L16.71 7.07L13.97 3.54M9.07 4.5L7.1 4.91L9.85 8.44L11.81 8.05L9.07 4.5M4.16 5.5L3.18 5.69A2 2 0 0 0 1.61 8.04L2 10L6.9 9.03L4.16 5.5M2 10V20C2 21.11 2.9 22 4 22H20C21.11 22 22 21.11 22 20V10H2Z" /></svg>
+        <a href="/radarr/activity/history"		>Radarr</a>
+      </span>
+      <br />
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>television-classic</title><path d="M8.16,3L6.75,4.41L9.34,7H4C2.89,7 2,7.89 2,9V19C2,20.11 2.89,21 4,21H20C21.11,21 22,20.11 22,19V9C22,7.89 21.11,7 20,7H14.66L17.25,4.41L15.84,3L12,6.84L8.16,3M4,9H17V19H4V9M19.5,9A1,1 0 0,1 20.5,10A1,1 0 0,1 19.5,11A1,1 0 0,1 18.5,10A1,1 0 0,1 19.5,9M19.5,12A1,1 0 0,1 20.5,13A1,1 0 0,1 19.5,14A1,1 0 0,1 18.5,13A1,1 0 0,1 19.5,12Z" /></svg>
+        <a href="/sonarr/activity/history"		>Sonarr</a>
+      </span>
+      <br />
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download-circle</title><path d="M12 2C17.5 2 22 6.5 22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2M8 17H16V15H8V17M16 10H13.5V6H10.5V10H8L12 14L16 10Z" /></svg>
+        <a href="/sabnzb"                 		>SABnzb</a>
+      </span>
+      <br />
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download-circle</title><path d="M12 2C17.5 2 22 6.5 22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2M8 17H16V15H8V17M16 10H13.5V6H10.5V10H8L12 14L16 10Z" /></svg>
+        <a href="/transmission"           		>Transmission</a>
+      </span>
+    </p>
+</body>
+</html>
+
